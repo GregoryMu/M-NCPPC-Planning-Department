@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 # ---------------------------------------------------------------------------
-# download.py
+# clipBuildings.py
 # Created on: 2018-06-12 3:48:16.00000
 #   
-# Description: 
+# Description: Clips the OSM buildings file to Prince George's County
 # ---------------------------------------------------------------------------
 
 # Import 

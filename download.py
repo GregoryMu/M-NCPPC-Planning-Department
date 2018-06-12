@@ -3,7 +3,7 @@
 # download.py
 # Created on: 2018-06-12 3:48:16.00000
 #   
-# Description: 
+# Description: Downloads the current OSM data for the state of Maryland and extracts it to a folder
 # ---------------------------------------------------------------------------
 
 # Import 
