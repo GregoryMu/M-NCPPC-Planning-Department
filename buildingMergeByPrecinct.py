@@ -48,6 +48,21 @@ while (x < rows):
     existX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\exist" + str(x) + ".shp"
     intersectX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\intersect" + str(x) + ".shp"
     newX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\new" + str(x) + ".shp"
+    # Checks for old data to overwrite
+    if arcpy.Exists(precinctX_shp):
+        arcpy.Delete_management(precinctX_shp)
+    if arcpy.Exists(buildingX_shp):
+        arcpy.Delete_management(buildingX_shp)
+    if arcpy.Exists(addrX_shp):
+        arcpy.Delete_management(addrX_shp)
+    if arcpy.Exists(existX_shp):
+        arcpy.Delete_management(existX_shp)
+    if arcpy.Exists(buildingX_SpatialJoin_shp):
+        arcpy.Delete_management(buildingX_SpatialJoin_shp)
+    if arcpy.Exists(intersectX_shp):
+        arcpy.Delete_management(intersectX_shp)
+    if arcpy.Exists(newX_shp):
+        arcpy.Delete_management(newX_shp)
     # Selects a single precint and clips buildings, addresses, and existing buildings to that precinct
     arcpy.Select_analysis(Election_Precinct_2014_Py_shp, precinctX_shp, Expression)
     arcpy.Clip_analysis(Building_2014_Py_shp, precinctX_shp, buildingX_shp, "")
@@ -65,7 +80,7 @@ while (x < rows):
     arcpy.CalculateField_management(buildingX_SpatialJoin_shp, "COMPLETE_S", "!COMPLETE_S!.title()", "PYTHON_9.3", "")
     arcpy.CalculateField_management(buildingX_SpatialJoin_shp, "COMPLETE_1", "!COMPLETE_1!.title()", "PYTHON_9.3", "")
     arcpy.CalculateField_management(buildingX_SpatialJoin_shp, "PLACE_NAME", "!PLACE_NAME!.title()", "PYTHON_9.3", "")
-    # 
+    # Checks for existing buildings and outputs both existing buildings and new buildings
     arcpy.Intersect_analysis([existX_shp, buildingX_SpatialJoin_shp], intersectX_shp)
     arcpy.MakeFeatureLayer_management(buildingX_SpatialJoin_shp, "building" + str(x) + "_SpatialJoin_shp")
     arcpy.SelectLayerByLocation_management("building" + str(x) + "_SpatialJoin_shp", "INTERSECT", intersectX_shp, "", "NEW_SELECTION", "INVERT")
