@@ -11,8 +11,14 @@ import requests, zipfile, StringIO, arcpy
 
 url = "http://download.geofabrik.de/north-america/us/maryland-latest-free.shp.zip"
 
+print "Beginning Download"
+
 r = requests.get(url, stream = True)
 z = zipfile.ZipFile(StringIO.StringIO(r.content))
+
+print "File Downloaded"
+print "Beginning Extraction"
+
 z.extractall("C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\maryland-latest-free.shp")
 
 print "Files Extracted"
