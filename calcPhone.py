@@ -10,6 +10,7 @@
 # Import arcpy module
 import arcpy
 
+print "Beginning Converting Telephone"
 
 # Local variables (path for shapefile):
 shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\Library_Pt.shp"
@@ -22,3 +23,5 @@ arcpy.CalculateField_management(shp, "phone", "\"+1-\" + !TELEPHONE!", "PYTHON_9
 
 # Process: Delete Original Telephone Field
 arcpy.DeleteField_management(shp, "TELEPHONE")
+
+print "Telephone Converted"
