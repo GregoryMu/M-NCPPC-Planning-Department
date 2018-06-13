@@ -14,6 +14,8 @@
 # Import arcpy module
 import arcpy
 
+print "Beginning Clipping"
+
 # Local variables (path for Building shapefile, Election Precinct Shapefile, Address Point shapefile, and Existing Building shapefiel):
 Building_2014_Py_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\Building_2014_Py.shp"
 Election_Precinct_2014_Py_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\Election_Precinct_2014_Py.shp"
