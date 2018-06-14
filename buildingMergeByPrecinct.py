@@ -33,26 +33,26 @@ rows = int(arcpy.GetCount_management(Election_Precinct_2014_Py_shp).getOutput(0)
 
 # Initial variables to initiate loop
 Expression = "\"FID\" = " + str(x)
-buildingX_SpatialJoin_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\building" + str(x) + "_SpatialJoin.shp"
+buildingX_SpatialJoin_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\building_join\\building" + str(x) + "_SpatialJoin.shp"
 precinctX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\precinct" + str(x) + ".shp"
 buildingX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\building" + str(x) + ".shp"
 addrX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + ".shp"
 existX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\exist" + str(x) + ".shp"
-intersectX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\intersect" + str(x) + ".shp"
-newX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\new" + str(x) + ".shp"
+intersectX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\intersect\\intersect" + str(x) + ".shp"
+newX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\new\\new" + str(x) + ".shp"
 
 print "Starting Loop"
 
 # Loop runs through each precinct
 while (x < rows):
     Expression = "\"FID\" = " + str(x)
-    buildingX_SpatialJoin_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\building" + str(x) + "_SpatialJoin.shp"
+    buildingX_SpatialJoin_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\building_join\\building" + str(x) + "_SpatialJoin.shp"
     precinctX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\precinct" + str(x) + ".shp"
     buildingX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\building" + str(x) + ".shp"
     addrX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + ".shp"
     existX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\exist" + str(x) + ".shp"
-    intersectX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\intersect" + str(x) + ".shp"
-    newX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\new" + str(x) + ".shp"
+    intersectX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\intersect\\intersect" + str(x) + ".shp"
+    newX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\new\\new" + str(x) + ".shp"
     # Selects a single precint and clips buildings, addresses, and existing buildings to that precinct
     arcpy.Select_analysis(Election_Precinct_2014_Py_shp, precinctX_shp, Expression)
     arcpy.Clip_analysis(Building_2014_Py_shp, precinctX_shp, buildingX_shp, "")
