@@ -12,7 +12,7 @@ import arcpy
 
 
 # Local variables (path for shapefile):
-shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\Library_Pt.shp"
+shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\Projected\\Library_Pt.shp"
 
 # Process: Add Housenumber Field
 arcpy.AddField_management(shp, "NUMBER", "TEXT", "", "", "", "", "NULLABLE", "NON_REQUIRED", "")

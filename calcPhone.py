@@ -13,7 +13,7 @@ import arcpy
 print "Beginning Converting Telephone"
 
 # Local variables (path for shapefile):
-shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\Library_Pt.shp"
+shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\Projected\\Library_Pt.shp"
 
 # Process: Add new Phone Field
 arcpy.AddField_management(shp, "phone", "TEXT", "", "", "", "", "NULLABLE", "NON_REQUIRED", "")
