@@ -55,9 +55,13 @@ while (x < rows):
     newX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\new\\new" + str(x) + ".shp"
     # Selects a single fishnet and clips buildings, addresses, and existing buildings to that fishnet
     arcpy.Select_analysis(fishnet_county_shp, fishnetX_shp, Expression)
-    arcpy.Clip_analysis(Building_2014_Py_shp, fishnetX_shp, buildingX_shp, "")
+    arcpy.MakeFeatureLayer_management(Building_2014_Py_shp, "Building_2014_Py_shp")
+    arcpy.SelectLayerByLocation_management("Building_2014_Py_shp", "INTERSECT", fishnetX_shp, "", "NEW_SELECTION", "NOT_INVERT")
+    arcpy.CopyFeatures_management("Building_2014_Py_shp", buildingX_shp)
     arcpy.Clip_analysis(Address_Pt_shp, fishnetX_shp, addrX_shp, "")
-    arcpy.Clip_analysis(Existing_Building_shp, fishnetX_shp, existX_shp, "")
+    arcpy.MakeFeatureLayer_management(Existing_Building_shp, "buildings_shp")
+    arcpy.SelectLayerByLocation_management("buildings_shp", "INTERSECT", fishnetX_shp, "", "NEW_SELECTION", "NOT_INVERT")
+    arcpy.CopyFeatures_management("buildings_shp", existX_shp, "", "0", "0", "0")
     # Joins building and address clipped shapefiles
     arcpy.SpatialJoin_analysis(buildingX_shp, addrX_shp, buildingX_SpatialJoin_shp, "JOIN_ONE_TO_ONE", "KEEP_ALL", "COMPLETE_A \"COMPLETE_A\" true true false 27 Text 0 0 ,First,#,C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\addr" + str(x) + ".shp,COMPLETE_A,-1,-1;COMPLETE_S \"COMPLETE_S\" true true false 151 Text 0 0 ,First,#,C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\addr" + str(x) + ".shp,COMPLETE_S,-1,-1;COMPLETE_1 \"COMPLETE_1\" true true false 96 Text 0 0 ,First,#,C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\addr" + str(x) + ".shp,COMPLETE_1,-1,-1;PLACE_NAME \"PLACE_NAME\" true true false 30 Text 0 0 ,First,#,C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\addr" + str(x) + ".shp,PLACE_NAME,-1,-1;STATE_NAME \"STATE_NAME\" true true false 2 Text 0 0 ,First,#,C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\addr" + str(x) + ".shp,STATE_NAME,-1,-1;ZIP_CODE \"ZIP_CODE\" true true false 5 Text 0 0 ,First,#,C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\addr" + str(x) + ".shp,ZIP_CODE,-1,-1", "INTERSECT", "", "")
     # Edits tags (deletes auto field JoinCount, Adds two fields for OSM tags: building=yes and source=M-NCPPC,
