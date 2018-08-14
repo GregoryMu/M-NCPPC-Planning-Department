@@ -16,16 +16,23 @@ import arcpy
 
 print "Beginning Clipping"
 
-# Local variables (path for Building shapefile, WSSC Grid Shapefile, Address Point shapefile, and Existing Building shapefile):
+# Local variables (path for Building shapefile, WSSC Grid Shapefile, Address Point shapefile, Existing Building shapefile, and county shapefile):
 Building_2014_Py_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\Projected\\Building_2014_Py.shp"
 WSSC_Grid = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\Projected\\WSSC_Grid.shp"
 Address_Pt_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\Projected\\Address_Pt.shp"
 Existing_Building_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\OSM_PG\\buildings.shp"
+county_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\Projected\\County.shp"
+building_county_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\Projected\\building_county.shp"
 
 # Set Geoprocessing environments
 arcpy.env.scratchWorkspace = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace"
 arcpy.env.workspace = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace"
 arcpy.env.overwriteOutput = True
+
+# Clips out buildings outside of county
+arcpy.MakeFeatureLayer_management(Building_2014_Py_shp, "Building_2014_Py_shp")
+arcpy.SelectLayerByLocation_management("Building_2014_Py_shp", "HAVE_THEIR_CENTER_IN", county_shp, "", "NEW_SELECTION", "NOT_INVERT")
+arcpy.CopyFeatures_management("Building_2014_Py_shp", building_county_shp)
 
 # Variables to run while loop for each grid
 x = 0
@@ -38,8 +45,16 @@ wsscX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\
 buildingX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\building" + str(x) + ".shp"
 addrX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + ".shp"
 existX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\exist" + str(x) + ".shp"
-intersectX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\intersect\\intersect" + str(x) + ".shp"
-newX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\new\\new" + str(x) + ".shp"
+intersectX_one_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\intersect\\intersect_one\\intersect" + str(x) + ".shp"
+newX_one_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\new\\new_one\\new" + str(x) + ".shp"
+intersectX_multi_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\intersect\\intersect_multi\\intersect" + str(x) + ".shp"
+newX_multi_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\new\\new_multi\\new" + str(x) + ".shp"
+buildingX_m_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\building" + str(x) + "_m.shp"
+buildingX_one_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\building" + str(x) + "_one.shp"
+addrX_multi_intersect_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\intersect\\addr\\addr" + str(x) + "_multi.shp"
+addrX_multi_new_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\new\\addr\\addr" + str(x) + "_multi.shp"
+addrX_multi_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + "_multi.shp"
+buildingX_multi_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\multi\\building" + str(x) + "_multi.shp"
 
 print "Starting Loop"
 
@@ -51,22 +66,30 @@ while (x < rows):
     buildingX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\building" + str(x) + ".shp"
     addrX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + ".shp"
     existX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\exist" + str(x) + ".shp"
-    intersectX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\intersect\\intersect" + str(x) + ".shp"
-    newX_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\new\\new" + str(x) + ".shp"
+    intersectX_one_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\intersect\\intersect_one\\intersect" + str(x) + ".shp"
+    newX_one_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\new\\new_one\\new" + str(x) + ".shp"
+    intersectX_multi_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\intersect\\intersect_multi\\intersect" + str(x) + ".shp"
+    newX_multi_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\new\\new_multi\\new" + str(x) + ".shp"
+    buildingX_m_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\building" + str(x) + "_m.shp"
+    buildingX_one_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\building" + str(x) + "_one.shp"
+    addrX_multi_intersect_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\intersect\\addr\\addr" + str(x) + "_multi.shp"
+    addrX_multi_new_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\new\\addr\\addr" + str(x) + "_multi.shp"
+    addrX_multi_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + "_multi.shp"
+    buildingX_multi_shp = "C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\building" + str(x) + "_multi.shp"
     # Selects a single grid and clips buildings, addresses, and existing buildings to that grid
     arcpy.Select_analysis(WSSC_Grid, wsscX_shp, Expression)
-    arcpy.MakeFeatureLayer_management(Building_2014_Py_shp, "Building_2014_Py_shp")
-    arcpy.SelectLayerByLocation_management("Building_2014_Py_shp", "INTERSECT", wsscX_shp, "", "NEW_SELECTION", "NOT_INVERT")
-    arcpy.CopyFeatures_management("Building_2014_Py_shp", buildingX_shp)
+    arcpy.MakeFeatureLayer_management(building_county_shp, "building_county_shp")
+    arcpy.SelectLayerByLocation_management("building_county_shp", "HAVE_THEIR_CENTER_IN", wsscX_shp, "", "NEW_SELECTION", "NOT_INVERT")
+    arcpy.CopyFeatures_management("building_county_shp", buildingX_shp)
     arcpy.Clip_analysis(Address_Pt_shp, wsscX_shp, addrX_shp, "")
     arcpy.MakeFeatureLayer_management(Existing_Building_shp, "buildings_shp")
-    arcpy.SelectLayerByLocation_management("buildings_shp", "INTERSECT", wsscX_shp, "", "NEW_SELECTION", "NOT_INVERT")
+    arcpy.SelectLayerByLocation_management("buildings_shp", "HAVE_THEIR_CENTER_IN", wsscX_shp, "", "NEW_SELECTION", "NOT_INVERT")
     arcpy.CopyFeatures_management("buildings_shp", existX_shp, "", "0", "0", "0")
     # Joins building and address clipped shapefiles
-    arcpy.SpatialJoin_analysis(buildingX_shp, addrX_shp, buildingX_SpatialJoin_shp, "JOIN_ONE_TO_ONE", "KEEP_ALL", "COMPLETE_A \"COMPLETE_A\" true true false 27 Text 0 0 ,First,#,C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + ".shp,COMPLETE_A,-1,-1;COMPLETE_S \"COMPLETE_S\" true true false 151 Text 0 0 ,First,#,C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + ".shp,COMPLETE_S,-1,-1;COMPLETE_1 \"COMPLETE_1\" true true false 96 Text 0 0 ,First,#,C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + ".shp,COMPLETE_1,-1,-1;PLACE_NAME \"PLACE_NAME\" true true false 30 Text 0 0 ,First,#,C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + ".shp,PLACE_NAME,-1,-1;STATE_NAME \"STATE_NAME\" true true false 2 Text 0 0 ,First,#,C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + ".shp,STATE_NAME,-1,-1;ZIP_CODE \"ZIP_CODE\" true true false 5 Text 0 0 ,First,#,C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + ".shp,ZIP_CODE,-1,-1", "INTERSECT", "", "")
+    arcpy.SpatialJoin_analysis(buildingX_shp, addrX_shp, buildingX_SpatialJoin_shp, "JOIN_ONE_TO_ONE", "KEEP_ALL", "HEIGHT \"HEIGHT\" true true false 19 Double 8 18 ,First,#,C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + ".shp,HEIGHT,-1,-1;ROOF_TYPE \"ROOF_TYPE\" true true false 50 Text 0 0 ,First,#,C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + ".shp,ROOF_TYPE,-1,-1;COMPLETE_A \"COMPLETE_A\" true true false 27 Text 0 0 ,First,#,C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + ".shp,COMPLETE_A,-1,-1;COMPLETE_S \"COMPLETE_S\" true true false 151 Text 0 0 ,First,#,C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + ".shp,COMPLETE_S,-1,-1;COMPLETE_1 \"COMPLETE_1\" true true false 96 Text 0 0 ,First,#,C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + ".shp,COMPLETE_1,-1,-1;PLACE_NAME \"PLACE_NAME\" true true false 30 Text 0 0 ,First,#,C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + ".shp,PLACE_NAME,-1,-1;STATE_NAME \"STATE_NAME\" true true false 2 Text 0 0 ,First,#,C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + ".shp,STATE_NAME,-1,-1;ZIP_CODE \"ZIP_CODE\" true true false 5 Text 0 0 ,First,#,C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + ".shp,ZIP_CODE,-1,-1", "INTERSECT", "", "")
     # Edits tags (deletes auto field JoinCount, Adds two fields for OSM tags: building=yes and source=M-NCPPC,
     # and reformats address fields from all caps to only caps on first letter of each word
-    arcpy.DeleteField_management(buildingX_SpatialJoin_shp, ["Join_Count", "TARGET_FID"])
+    
     arcpy.AddField_management(buildingX_SpatialJoin_shp, "building", "TEXT", "", "", "", "", "NULLABLE", "NON_REQUIRED", "")
     arcpy.CalculateField_management(buildingX_SpatialJoin_shp, "building", "\"yes\"", "PYTHON_9.3", "")
     arcpy.AddField_management(buildingX_SpatialJoin_shp, "source", "TEXT", "", "", "", "", "NULLABLE", "NON_REQUIRED", "")
@@ -74,16 +97,75 @@ while (x < rows):
     arcpy.CalculateField_management(buildingX_SpatialJoin_shp, "COMPLETE_S", "!COMPLETE_S!.title()", "PYTHON_9.3", "")
     arcpy.CalculateField_management(buildingX_SpatialJoin_shp, "COMPLETE_1", "!COMPLETE_1!.title()", "PYTHON_9.3", "")
     arcpy.CalculateField_management(buildingX_SpatialJoin_shp, "PLACE_NAME", "!PLACE_NAME!.title()", "PYTHON_9.3", "")
+    arcpy.CalculateField_management(buildingX_SpatialJoin_shp, "ROOF_TYPE", "!ROOF_TYPE!.replace(\"Gable\",\"Gabled\")", "PYTHON_9.3", "")
+    arcpy.CalculateField_management(buildingX_SpatialJoin_shp, "ROOF_TYPE", "!ROOF_TYPE!.lower()", "PYTHON_9.3", "")
+    arcpy.CalculateField_management(buildingX_SpatialJoin_shp, "HEIGHT", "!HEIGHT! / 3.2808", "PYTHON_9.3", "")
+
+    # Seperates buildings with multiple addresses
+    arcpy.MakeFeatureLayer_management(buildingX_SpatialJoin_shp, "building" + str(x) + "_join_shp")
+    arcpy.SelectLayerByAttribute_management("building" + str(x) + "_join_shp", "NEW_SELECTION", "\"Join_Count\" > 1")
+    arcpy.CopyFeatures_management("building" + str(x) + "_join_shp", buildingX_m_shp, "", "0", "0", "0")
+
+    arcpy.MakeFeatureLayer_management(buildingX_SpatialJoin_shp, "building" + str(x) + "_join_one")
+    arcpy.SelectLayerByAttribute_management("building" + str(x) + "_join_one", "NEW_SELECTION", "\"Join_Count\" <= 1")
+    arcpy.CopyFeatures_management("building" + str(x) + "_join_one", buildingX_one_shp, "", "0", "0", "0")
+
+    arcpy.MakeFeatureLayer_management(addrX_shp, "addr" + str(x) + "_shp")
+    arcpy.SelectLayerByLocation_management("addr" + str(x) + "_shp", "INTERSECT", buildingX_m_shp, "", "NEW_SELECTION", "NOT_INVERT")
+    arcpy.CopyFeatures_management("addr" + str(x) + "_shp", addrX_multi_shp, "", "0", "0", "0")
+
+    arcpy.MakeFeatureLayer_management(buildingX_shp, "building" + str(x) + "_shp")
+    arcpy.SelectLayerByLocation_management("building" + str(x) + "_shp", "INTERSECT", addrX_multi_shp, "", "NEW_SELECTION", "NOT_INVERT")
+    arcpy.CopyFeatures_management("building" + str(x) + "_shp", buildingX_multi_shp, "", "0", "0", "0")
+
+    # Deletes unnecessary fields from addrX_multi_shp and buildingX_multi_shp
+    arcpy.DeleteField_management("C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\addr" + str(x) + "_multi.shp",["ADDRESS_NU","ADDRESS__1","ADDRESS__3","ADDRESS_NU","ADDRESS__2","STREET_NAM","STREET_N_1","STREET_N_2","SEPARATOR_","STREET_N_3","STREET_N_4","STREET_N_5","STREET_N_6","SUBADDRESS","SUBADDRE_1","SUBADDRE_2","SUBADDRE_3","SUBADDRE_4","SUBADDRE_5","SUBADDRE_6","SUBADDRE_7","PLACE_STAT","ADDRESS_ID","ADDRESS_AU","ADDRESS_CO","ADDRESS_TR","ADDRESS__3","ADDRESS_AN","ADDRESS_CL","DELIVERY_A","ADDRESS__4","ADDRESS_RA","COMMENTS","HUNDRED_BL","LAST_EDIT_","LAST_EDITO","LAST_DATE_","LAST_DATE1","LAST_VERIF","MUNICIPALI","NEAR_STREE","NEAR_STR_1","NOTE_NUMBE","NOTE_STREE","NOTE_MISCE","STATUS_FLA","STREET_N_7","STREET_N_8","STREET_N_9","CENTERLINE","LABEL_LENG","LABEL_TYPE","GEOLOCATOR","LANDMARK_N","LANDMARK_1","LANDMARK_2","COMPLETE_L","FULL_LANDM","LANDMARK_C","GLOBALID","LARDIR"])
+    arcpy.DeleteField_management("C:\\Users\\Gregory.mulea\\Documents\\ArcGIS\\Workspace\\buildingsX\\temp\\building" + str(x) + "_multi.shp",["FID_exist1","osm_id","code","fclass","name","type","FID_buildi","FEATURE_CO","SOURCE_COD","SHAPE_AREA","SHAPE_LEN"])
+    arcpy.CalculateField_management(buildingX_multi_shp, "ROOF_TYPE", "!ROOF_TYPE!.replace(\"Gable\",\"Gabled\")", "PYTHON_9.3", "")
+    arcpy.CalculateField_management(buildingX_multi_shp, "ROOF_TYPE", "!ROOF_TYPE!.lower()", "PYTHON_9.3", "")
+    arcpy.CalculateField_management(buildingX_multi_shp, "HEIGHT", "!HEIGHT! / 3.2808", "PYTHON_9.3", "")
+    arcpy.AddField_management(buildingX_multi_shp, "building", "TEXT", "", "", "", "", "NULLABLE", "NON_REQUIRED", "")
+    arcpy.CalculateField_management(buildingX_multi_shp, "building", "\"yes\"", "PYTHON_9.3", "")
+    arcpy.AddField_management(buildingX_multi_shp, "source", "TEXT", "", "", "", "", "NULLABLE", "NON_REQUIRED", "")
+    arcpy.CalculateField_management(buildingX_multi_shp, "source", "\"M-NCPPC\"", "PYTHON_9.3", "")
+    arcpy.AddField_management(addrX_multi_shp, "source", "TEXT", "", "", "", "", "NULLABLE", "NON_REQUIRED", "")
+    arcpy.CalculateField_management(addrX_multi_shp, "source", "\"M-NCPPC\"", "PYTHON_9.3", "")
+    
     # Checks for existing buildings and outputs both existing buildings and new buildings
-    arcpy.Intersect_analysis([existX_shp, buildingX_SpatialJoin_shp], intersectX_shp)
-    arcpy.MakeFeatureLayer_management(buildingX_SpatialJoin_shp, "building" + str(x) + "_SpatialJoin_shp")
-    arcpy.SelectLayerByLocation_management("building" + str(x) + "_SpatialJoin_shp", "INTERSECT", intersectX_shp, "", "NEW_SELECTION", "INVERT")
-    arcpy.CopyFeatures_management("building" + str(x) + "_SpatialJoin_shp", newX_shp)
+    arcpy.Intersect_analysis([existX_shp, buildingX_one_shp], intersectX_one_shp)
+    arcpy.MakeFeatureLayer_management(buildingX_one_shp, "building" + str(x) + "_One_shp")
+    arcpy.SelectLayerByLocation_management("building" + str(x) + "_One_shp", "INTERSECT", intersectX_one_shp, "", "NEW_SELECTION", "INVERT")
+    arcpy.CopyFeatures_management("building" + str(x) + "_One_shp", newX_one_shp)
+    
+    arcpy.Intersect_analysis([existX_shp, buildingX_multi_shp], intersectX_multi_shp)
+    arcpy.MakeFeatureLayer_management(buildingX_multi_shp, "building" + str(x) + "_Multi_shp")
+    arcpy.SelectLayerByLocation_management("building" + str(x) + "_Multi_shp", "INTERSECT", intersectX_multi_shp, "", "NEW_SELECTION", "INVERT")
+    arcpy.CopyFeatures_management("building" + str(x) + "_Multi_shp", newX_multi_shp)
+
+    arcpy.MakeFeatureLayer_management(addrX_multi_shp, "addr_multi" + str(x) + "_shp")
+    arcpy.SelectLayerByLocation_management("addr_multi" + str(x) + "_shp", "INTERSECT", existX_shp, "", "NEW_SELECTION", "NOT_INVERT")
+    arcpy.CopyFeatures_management("addr_multi" + str(x) + "_shp", addrX_multi_intersect_shp, "", "0", "0", "0")
+
+    arcpy.MakeFeatureLayer_management(addrX_multi_shp, "addr_multi" + str(x) + "_shp")
+    arcpy.SelectLayerByLocation_management("addr_multi" + str(x) + "_shp", "INTERSECT", existX_shp, "", "NEW_SELECTION", "INVERT")
+    arcpy.CopyFeatures_management("addr_multi" + str(x) + "_shp", addrX_multi_new_shp, "", "0", "0", "0")
+
+    # Deletes empty Shapefiles
+    shapefiles = [addrX_multi_new_shp, addrX_multi_intersect_shp, newX_multi_shp, intersectX_multi_shp, newX_one_shp, intersectX_one_shp] 
+    for shapefile in shapefiles:
+        if arcpy.management.GetCount(shapefile)[0]=="0": 
+            arcpy.Delete_management(shapefile) 
+            print shapefile + "Deleted" 
+    
     # Deletes the placeholder clipped files in order to minimize clutter
     arcpy.Delete_management(wsscX_shp)
     arcpy.Delete_management(buildingX_shp)
     arcpy.Delete_management(addrX_shp)
     arcpy.Delete_management(existX_shp)
+    arcpy.Delete_management(buildingX_m_shp)
+    arcpy.Delete_management(buildingX_multi_shp)
+    arcpy.Delete_management(buildingX_one_shp)
+    arcpy.Delete_management(addrX_multi_shp)
     # Print value to keep track of the progress of the script
     print x
     # Increments x value by one
